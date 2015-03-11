@@ -92,6 +92,9 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
+      
+      storeQuote(quote, "quote-" + i + ".utf8");
+      
       LOG.info(quote.getSource());
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -125,7 +128,20 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+	String dir = WORKSPACE_DIRECTORY;
+      
+	for(String tag : quote.getTags()) {
+		dir += '/' + tag;
+	}
+
+	try {
+		new File(dir).mkdirs();
+		(new File(dir + '/' + filename)).createNewFile();
+	} catch (IOException e) {
+		throw new IOException("Can't write on disk");
+	}
+	
+//    throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
   
   /**
