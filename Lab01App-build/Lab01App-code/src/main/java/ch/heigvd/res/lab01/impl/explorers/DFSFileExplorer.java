@@ -24,12 +24,16 @@ public class DFSFileExplorer implements IFileExplorer {
 
 		if(files != null) {
 			Arrays.sort(files, NameFileComparator.NAME_INSENSITIVE_COMPARATOR);
-			
+
 			for(File file : files) {
 				if(file.isFile()) {
 					visitor.visit(file);
-				} else if(file.isDirectory()) {
-					explore(file, visitor);
+				}
+			}
+
+			for(File dir : files) {
+				if(dir.isDirectory()) {
+					explore(dir, visitor);
 				}
 			}
 		}
