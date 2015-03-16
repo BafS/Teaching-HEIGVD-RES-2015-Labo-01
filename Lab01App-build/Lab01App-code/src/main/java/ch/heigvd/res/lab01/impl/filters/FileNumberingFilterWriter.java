@@ -17,25 +17,39 @@ import java.util.logging.Logger;
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
-  private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+	private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+	private boolean isFirst;
+	private int lineNumber;
 
-  public FileNumberingFilterWriter(Writer out) {
-    super(out);
-  }
+	public FileNumberingFilterWriter(Writer out) {
+		super(out);
+		isFirst = true;
+		lineNumber = 0;
+	}
 
-  @Override
-  public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+	@Override
+	public void write(String str, int off, int len) throws IOException {
+		if(isFirst) {
+			isFirst = !isFirst;
+		}
 
-  @Override
-  public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+		String currentLine = str.substring(off, off + len);
+		currentLine = currentLine.replaceAll("[0-9]", "");
+		currentLine = currentLine.replaceAll("[\n\r]", " " + Integer.toString(lineNumber++) + "\t");
+		out.write(Integer.toString(lineNumber++) + "\t" + currentLine);
+//    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+	}
 
-  @Override
-  public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+	@Override
+	public void write(char[] cbuf, int off, int len) throws IOException {
+		this.write(String.valueOf(cbuf), off, len);
+//		throw new UnsupportedOperationException("The student has not implemented this method yet.");
+	}
+
+	@Override
+	public void write(int c) throws IOException {
+		this.write(Character.toChars(c), 0, 1);
+//		throw new UnsupportedOperationException("The student has not implemented this method yet.");
+	}
 
 }
