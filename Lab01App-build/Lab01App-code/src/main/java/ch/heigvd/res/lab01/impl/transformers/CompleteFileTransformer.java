@@ -1,5 +1,7 @@
 package ch.heigvd.res.lab01.impl.transformers;
 
+import ch.heigvd.res.lab01.impl.filters.FileNumberingFilterWriter;
+import ch.heigvd.res.lab01.impl.filters.UpperCaseFilterWriter;
 import java.io.Writer;
 
 /**
