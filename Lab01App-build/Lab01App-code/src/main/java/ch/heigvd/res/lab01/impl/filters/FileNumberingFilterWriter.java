@@ -1,5 +1,6 @@
 package ch.heigvd.res.lab01.impl.filters;
 
+import com.sun.xml.internal.ws.util.StringUtils;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -24,19 +25,27 @@ public class FileNumberingFilterWriter extends FilterWriter {
 	public FileNumberingFilterWriter(Writer out) {
 		super(out);
 		isFirst = true;
-		lineNumber = 0;
+		lineNumber = 1;
 	}
 
 	@Override
 	public void write(String str, int off, int len) throws IOException {
-		if(isFirst) {
-			isFirst = !isFirst;
-		}
 
 		String currentLine = str.substring(off, off + len);
-		currentLine = currentLine.replaceAll("[0-9]", "");
-		currentLine = currentLine.replaceAll("[\n\r]", " " + Integer.toString(lineNumber++) + "\t");
-		out.write(Integer.toString(lineNumber++) + "\t" + currentLine);
+		if(isFirst) {
+			currentLine = Integer.toString(lineNumber++) + "\t" + currentLine;
+			isFirst = false;
+		}
+		
+//		currentLine = currentLine.replaceAll("([0-9]{1,2})\t",  "$1");
+		currentLine = currentLine.replaceAll("\r\n",  "\\n");
+		currentLine = currentLine.replaceAll("(\\n|\\r)",  "$1__NUM__\t");
+		int count = currentLine.length() - currentLine.replace("__NUM__", "").length();
+		for(int i = 0; i < count; i++) {
+			currentLine = currentLine.replaceFirst("__NUM__", String.valueOf(lineNumber++));
+		}
+		
+		out.write(currentLine);
 //    throw new UnsupportedOperationException("The student has not implemented this method yet.");
 	}
 
