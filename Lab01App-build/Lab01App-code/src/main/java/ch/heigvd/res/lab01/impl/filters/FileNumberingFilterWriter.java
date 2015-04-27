@@ -1,6 +1,5 @@
 package ch.heigvd.res.lab01.impl.filters;
 
-import com.sun.xml.internal.ws.util.StringUtils;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
